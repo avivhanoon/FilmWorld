@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "234190733686",
+    "project_id": "filmworld-6ef49",
+    "storage_bucket": "filmworld-6ef49.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234190733686:android:7765adc2102dcf09987a57",
+        "android_client_info": {
+          "package_name": "com.example.filmworld"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUUtCQCjAisxHcMzbuznHlA6IZjcTexUc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

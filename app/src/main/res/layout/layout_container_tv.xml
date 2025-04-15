@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="6dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:id="@+id/viewSupporter"
+        app:layout_constraintTop_toBottomOf="@id/imageTvShow"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/background_tv_show"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textTvName"/>
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/imageTvShow"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedImageView"/>
+    <TextView
+        android:id="@+id/textTvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/oswald_bold"
+        android:textColor="@color/white"
+        android:text="TV Name"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageTvShow"
+        app:layout_constraintTop_toTopOf="@id/imageTvShow"/>
+    <TextView
+        android:text="TV Network Name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textNetwork"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/oswald_bold"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/textTvName"
+        app:layout_constraintTop_toBottomOf="@id/textTvName"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textStarted"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/oswald_bold"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/textTvName"
+        app:layout_constraintStart_toStartOf="@id/textTvName"
+        app:layout_constraintTop_toBottomOf="@id/textNetwork"
+        android:text="TV Show Started At"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textStatus"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/oswald_bold"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:text="TV Show Status"
+        app:layout_constraintEnd_toEndOf="@id/textTvName"
+        app:layout_constraintStart_toStartOf="@id/textTvName"
+        app:layout_constraintTop_toBottomOf="@id/textStarted"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
