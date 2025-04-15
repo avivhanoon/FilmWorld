@@ -1,9 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+
 }
 
 android {
+    buildFeatures {
+        dataBinding = true
+    }
     namespace = "com.example.filmworld"
     compileSdk = 35
 
@@ -51,5 +55,12 @@ dependencies {
 
     //rounded image view
     implementation("com.google.android.material:material:1.11.0")
-
+    //picasso implementation
+    implementation("com.squareup.picasso:picasso:2.71828")
+    //retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // For JSON parsing
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }
+
