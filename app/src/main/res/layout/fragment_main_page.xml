@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:id="@+id/layoutManager0"
+        android:id="@+id/layoutManager"
         android:background="@color/primaryblue"
         android:gravity="center_vertical"
         android:orientation="horizontal"
