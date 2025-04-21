@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="tvShow"
+            type="com.example.filmworld.models.TVShow" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +30,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:imageURL="@{tvShow.thumbnail}"
             android:layout_marginLeft="5dp"
             android:id="@+id/imageTvShow"
             android:layout_marginStart="10dp"
@@ -45,14 +48,14 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/oswald_bold"
             android:textColor="@color/white"
-            android:text="TV Name"
+            android:text="@{tvShow.name}"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imageTvShow"
             app:layout_constraintTop_toTopOf="@id/imageTvShow" />
 
         <TextView
-            android:text="TV Network Name"
+            android:text='@{tvShow.network + "(" + tvShow.country + ")"}'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textNetwork"
@@ -76,7 +79,7 @@
             app:layout_constraintEnd_toEndOf="@id/textTvName"
             app:layout_constraintStart_toStartOf="@id/textTvName"
             app:layout_constraintTop_toBottomOf="@id/textNetwork"
-            android:text="TV Show Started At" />
+            android:text='@{"Started At:" + tvShow.startDate}'/>
 
         <TextView
             android:layout_width="0dp"
@@ -87,7 +90,7 @@
             android:includeFontPadding="false"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:text="TV Show Status"
+            android:text="@{tvShow.status}"
             app:layout_constraintEnd_toEndOf="@id/textTvName"
             app:layout_constraintStart_toStartOf="@id/textTvName"
             app:layout_constraintTop_toBottomOf="@id/textStarted" />

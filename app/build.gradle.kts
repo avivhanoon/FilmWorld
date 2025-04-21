@@ -6,7 +6,7 @@ plugins {
 
 android {
     buildFeatures {
-        dataBinding = true
+        dataBinding = true;
     }
     namespace = "com.example.filmworld"
     compileSdk = 35

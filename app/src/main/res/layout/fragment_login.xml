@@ -24,7 +24,7 @@
             android:padding="25dp"
             android:fontFamily="@font/lobstertwo_bold"
             android:textColor="#120000"
-            android:text="Main Page"
+            android:text="FilmWorld"
             tools:ignore="HardcodedText" />
         <EditText
             android:layout_marginTop="10dp"

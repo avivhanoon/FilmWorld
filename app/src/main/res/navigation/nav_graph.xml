@@ -28,5 +28,17 @@
     <fragment
         android:id="@+id/mainPageFragment"
         android:name="com.example.filmworld.fragments.MainPageFragment"
-        android:label="MainPageFragment" />
+        android:label="MainPageFragment" >
+        <action
+            android:id="@+id/action_mainPageFragment_to_TVShowDetailsFragment"
+            app:destination="@id/TVShowDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/TVShowDetailsFragment"
+        android:name="com.example.filmworld.fragments.TVShowDetailsFragment"
+        android:label="TVShowDetailsFragment" >
+        <action
+            android:id="@+id/action_TVShowDetailsFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+    </fragment>
 </navigation>

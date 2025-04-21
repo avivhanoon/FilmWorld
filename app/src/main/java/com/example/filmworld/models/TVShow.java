@@ -9,8 +9,11 @@ public class TVShow {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("start_name")
+    @SerializedName("start_date")
     private String startDate;
+
+    @SerializedName("network")
+    private String network;
 
     @SerializedName("country")
     private String country;
@@ -33,6 +36,9 @@ public class TVShow {
         return startDate;
     }
 
+    public String getNetwork(){
+        return network;
+    }
     public String getCountry() {
         return country;
     }
