@@ -29,6 +29,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="100dp"
+            android:background="@drawable/border"
             android:layout_height="100dp"
             android:imageURL="@{tvShow.thumbnail}"
             android:layout_marginLeft="5dp"

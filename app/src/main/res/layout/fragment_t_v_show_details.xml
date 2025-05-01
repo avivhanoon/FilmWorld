@@ -7,8 +7,22 @@
         <variable
             name="isLoading"
             type="Boolean" />
-
+        <variable
+            name="tvShowImageURL"
+            type="String" />
         <import type="android.view.View"/>
+        <variable
+            name="tvShowName"
+            type="String" />
+        <variable
+            name="networkCountry"
+            type="String" />
+        <variable
+            name="status"
+            type="String" />
+        <variable
+            name="startDate"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +31,125 @@
         android:animateLayoutChanges="true"
         android:background="@drawable/backgroung_2"
         tools:context=".fragments.TVShowDetailsFragment">
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:visibility="gone"
+            android:id="@+id/sliderViewPager"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="@id/sliderViewPager"
+            android:id="@+id/viewEdge"
+            android:visibility="gone"
+            android:background="@drawable/fade_background"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutSliderIndicators"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageTvShow"
+            app:layout_constraintBottom_toBottomOf="@id/viewEdge"/>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/imageViewBackButton"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/app_name"
+            android:padding="3dp"
+            android:background="@drawable/nackground_back_button"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primaryblue" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTvName"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/oswald_bold"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@{tvShowName}"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageTvShow"
+            app:layout_constraintTop_toBottomOf="@id/sliderViewPager"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textStatus"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:visibility="gone"
+            android:fontFamily="@font/oswald_bold"
+            android:textSize="12sp"
+            android:includeFontPadding="false"
+            android:text='@{"Status: " + status}'
+            android:textColor="@color/white"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="@id/textNetworkCountry"
+            app:layout_constraintStart_toStartOf="@id/textNetworkCountry"
+            app:layout_constraintTop_toBottomOf="@id/textNetworkCountry"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textStartedAt"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:visibility="gone"
+            android:fontFamily="@font/oswald_bold"
+            android:textSize="12sp"
+            android:includeFontPadding="false"
+            android:text='@{"Started On: "+startDate}'
+            android:textColor="@color/white"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="@id/textStatus"
+            app:layout_constraintStart_toStartOf="@id/textStatus"
+            app:layout_constraintTop_toBottomOf="@id/textStatus"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textNetworkCountry"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:visibility="gone"
+            android:fontFamily="@font/oswald_bold"
+            android:textSize="14sp"
+            android:includeFontPadding="false"
+            android:text='@{"Network: " + networkCountry}'
+            android:textColor="@color/white"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="@id/textTvName"
+            app:layout_constraintStart_toStartOf="@id/textTvName"
+            app:layout_constraintTop_toBottomOf="@id/textTvName"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:id="@+id/imageTvShow"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/sliderViewPager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sliderViewPager"
+            android:background="@drawable/border"
+            android:src="@drawable/background"
+            android:scaleType="centerCrop"
+            android:padding="3dp"
+            android:imageURL="@{tvShowImageURL}"
+            />
         <ProgressBar
             android:layout_width="25dp"
             android:layout_height="25dp"
