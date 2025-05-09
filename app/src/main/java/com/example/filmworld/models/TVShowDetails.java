@@ -23,17 +23,21 @@ public class TVShowDetails {
     @SerializedName("pictures")
     private String[] pictures;
 
+    @SerializedName("description")
+    private String description;
+
     @SerializedName("episodes")
     private List<Episode> episodes;
 
     public String getUrl() {
         return url;
     }
-
     public String getRunTime() {
         return runTime;
     }
-
+    public String getDescription() {
+        return description;
+    }
     public String getImagePath() {
         return imagePath;
     }

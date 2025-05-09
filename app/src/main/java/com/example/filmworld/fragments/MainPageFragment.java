@@ -98,4 +98,5 @@ public class MainPageFragment extends Fragment implements TVShowsListener {
         bundle.putString("status", tvShow.getStatus());
         Navigation.findNavController(view).navigate(R.id.action_mainPageFragment_to_TVShowDetailsFragment, bundle);
     }
+
 }
