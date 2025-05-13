@@ -95,5 +95,17 @@
             app:layout_constraintEnd_toEndOf="@id/textTvName"
             app:layout_constraintStart_toStartOf="@id/textTvName"
             app:layout_constraintTop_toBottomOf="@id/textStarted" />
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:id="@+id/imageDelete"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_delete"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:tint="#FF474C"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

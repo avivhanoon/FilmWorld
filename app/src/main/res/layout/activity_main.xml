@@ -4,23 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <!-- Data binding variables can be added here -->
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment_container_view_tag"
+            android:id="@+id/fragmentContainerView"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph"
-            tools:ignore="InefficientWeight" />
-    </LinearLayout>
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/nav_graph" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:itemIconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:itemTextColor="@color/white"
+            android:background="@color/dark_blue_upper_bottom_bar"
+            app:menu="@menu/bottom_nav_menu" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

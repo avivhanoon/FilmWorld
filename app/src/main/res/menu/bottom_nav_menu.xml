@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/mainPageFragment"
         android:icon="@drawable/ic_home"
         android:title="Home"
         android:iconTint="@color/white"/>
     <item
-        android:id="@+id/nav_favorites"
+        android:id="@+id/watchlistFragment2"
         android:icon="@drawable/ic_favorites"
         android:title="Favorites"
         android:iconTint="@color/white" />

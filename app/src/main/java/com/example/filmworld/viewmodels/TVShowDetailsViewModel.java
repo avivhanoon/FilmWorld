@@ -30,5 +30,10 @@ public class TVShowDetailsViewModel extends AndroidViewModel {
     public Completable addToWatchlist(TVShow tvShow) {
         return tvShowDatabase.tvShowDao().addToWatchlist(tvShow);
     }
-
+    public Flowable<TVShow> getTVShowFromWatchlist( String tvShowid) {
+        return tvShowDatabase.tvShowDao().getTVShowFromWatchlist(tvShowid);
+    }
+    public Completable removeTVShowFromWtachlist( TVShow tvShow) {
+        return tvShowDatabase.tvShowDao().removeFromWatchList(tvShow);
+    }
 }

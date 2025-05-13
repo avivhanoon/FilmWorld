@@ -73,19 +73,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/imageTvShow"
                     app:layout_constraintBottom_toBottomOf="@id/viewEdge"/>
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:id="@+id/imageViewBackButton"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:contentDescription="@string/app_name"
-                    android:padding="3dp"
-                    android:background="@drawable/nackground_back_button"
-                    android:src="@drawable/ic_back"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/primaryblue" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

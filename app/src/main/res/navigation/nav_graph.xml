@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_TVShowDetailsFragment"
             app:destination="@id/TVShowDetailsFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_watchlistFragment2"
+            app:destination="@id/watchlistFragment2" />
     </fragment>
     <fragment
         android:id="@+id/TVShowDetailsFragment"
@@ -40,5 +43,19 @@
         <action
             android:id="@+id/action_TVShowDetailsFragment_to_mainPageFragment"
             app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_TVShowDetailsFragment_to_watchlistFragment2"
+            app:destination="@id/watchlistFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/watchlistFragment2"
+        android:name="com.example.filmworld.fragments.WatchlistFragment"
+        android:label="WatchlistFragment" >
+        <action
+            android:id="@+id/action_watchlistFragment2_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_watchlistFragment2_to_TVShowDetailsFragment"
+            app:destination="@id/TVShowDetailsFragment" />
     </fragment>
 </navigation>

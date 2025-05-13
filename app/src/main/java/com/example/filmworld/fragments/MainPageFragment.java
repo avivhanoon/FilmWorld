@@ -90,12 +90,7 @@ public class MainPageFragment extends Fragment implements TVShowsListener {
     @Override
     public void onShowTvShowClicked(TVShow tvShow) {
         Bundle bundle = new Bundle();
-        bundle.putInt("id", tvShow.getId());
-        bundle.putString("name", tvShow.getName());
-        bundle.putString("startDate", tvShow.getStartDate());
-        bundle.putString("country", tvShow.getCountry());
-        bundle.putString("network", tvShow.getNetwork());
-        bundle.putString("status", tvShow.getStatus());
+        bundle.putSerializable("tvshow", tvShow);
         Navigation.findNavController(view).navigate(R.id.action_mainPageFragment_to_TVShowDetailsFragment, bundle);
     }
 

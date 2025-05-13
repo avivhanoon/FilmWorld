@@ -3,15 +3,12 @@ package com.example.filmworld.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,18 +17,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.example.filmworld.R;
 import com.example.filmworld.adapters.EpisodeAdapter;
 import com.example.filmworld.adapters.ImageSliderAdapter;
 import com.example.filmworld.databinding.FragmentTVShowDetailsBinding;
 import com.example.filmworld.databinding.LayoutEpisodesBottomSheetBinding;
 import com.example.filmworld.models.TVShow;
+import com.example.filmworld.utilities.TempDataHolder;
 import com.example.filmworld.viewmodels.TVShowDetailsViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.Locale;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -43,6 +38,7 @@ public class TVShowDetailsFragment extends Fragment {
     private LayoutEpisodesBottomSheetBinding layoutEpisodesBottomSheetBinding;
     private static final String TAG = "TVShowDetailsFragment";
     private TVShow tvShow;
+    private Boolean isTVShowAvailabeInWatchlist = false;
 
     public TVShowDetailsFragment() {
         // Required empty public constructor
@@ -54,8 +50,7 @@ public class TVShowDetailsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTVShowDetailsBinding.inflate(inflater, container, false);
         doInitialization();
         return binding.getRoot();
@@ -63,24 +58,40 @@ public class TVShowDetailsFragment extends Fragment {
 
     private void doInitialization() {
         tvShowDetailsViewModel = new ViewModelProvider(this).get(TVShowDetailsViewModel.class);
-        getTVShowDetails();
         if (getArguments() != null && getArguments().containsKey("tvshow")) {
             tvShow = (TVShow) getArguments().getSerializable("tvshow");
         }
+        checkTVShowInWatchlist();
+        if (tvShow != null) {
+            getTVShowDetails();
+        } else {
+            Log.e(TAG, "tvShow object is null!");
+            Toast.makeText(getContext(), "Unable to load TV Show details", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        binding.imageViewBackButton.setOnClickListener(v -> Navigation.findNavController(binding.getRoot()).navigate(R.id.action_TVShowDetailsFragment_to_mainPageFragment));
+    private void checkTVShowInWatchlist() {
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(tvShowDetailsViewModel.getTVShowFromWatchlist(String.valueOf(tvShow.getId()))
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(tvShow -> {
+                    isTVShowAvailabeInWatchlist = true;
+                    binding.imageWatchList.setImageResource(R.drawable.ic_check);
+                    compositeDisposable.dispose();
+                }, throwable -> {
+                    Log.e(TAG, "Error checking watchlist", throwable);
+                    compositeDisposable.dispose();
+                }));
     }
 
     private void getTVShowDetails() {
         binding.setIsLoading(true);
-        String tvShowId = "";
-        Bundle args = getArguments();
-        tvShowId = String.valueOf(args.getInt("id", -1));
+        String tvShowId = String.valueOf(tvShow.getId());
 
         tvShowDetailsViewModel.getTVShowDetails(tvShowId).observe(getViewLifecycleOwner(), tvShowDetailsResponse -> {
             binding.setIsLoading(false);
 
-            // Add null check to prevent NullPointerException
             if (tvShowDetailsResponse == null) {
                 Log.e(TAG, "Received null TVShowDetailsResponse");
                 Toast.makeText(getContext(), "Error loading show details", Toast.LENGTH_SHORT).show();
@@ -94,11 +105,10 @@ public class TVShowDetailsFragment extends Fragment {
 
                 binding.setTvShowImageURL(tvShowDetailsResponse.getTvShowDetails().getImagePath());
                 binding.imageTvShow.setVisibility(View.VISIBLE);
+
                 String description = tvShowDetailsResponse.getTvShowDetails().getDescription();
                 if (description != null && !description.trim().isEmpty()) {
-                    binding.descriptionTextView.setText(
-                            HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                    );
+                    binding.descriptionTextView.setText(HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY));
                 } else {
                     binding.descriptionTextView.setText("No description available.");
                 }
@@ -117,20 +127,11 @@ public class TVShowDetailsFragment extends Fragment {
                         binding.textReadMore.setText("Read More...");
                     }
                 });
-                binding.setRating(
-                        String.format(
-                                Locale.getDefault(),
-                                "%.2f",
-                                Double.parseDouble(tvShowDetailsResponse.getTvShowDetails().getRating())
-                        )
-                );
-                if(tvShowDetailsResponse.getTvShowDetails().getGenres() != null) {
-                    binding.setGenre(tvShowDetailsResponse.getTvShowDetails().getGenres()[0]);
-                }
-                else {
-                    binding.setGenre("N/A");
-                }
+
+                binding.setRating(String.format(Locale.getDefault(), "%.2f", Double.parseDouble(tvShowDetailsResponse.getTvShowDetails().getRating())));
+                binding.setGenre(tvShowDetailsResponse.getTvShowDetails().getGenres() != null ? tvShowDetailsResponse.getTvShowDetails().getGenres()[0] : "N/A");
                 binding.setRuntime(tvShowDetailsResponse.getTvShowDetails().getRunTime() + " Min");
+
                 binding.viewOivider1.setVisibility(View.VISIBLE);
                 binding.layoutMisc.setVisibility(View.VISIBLE);
                 binding.viewDivider2.setVisibility(View.VISIBLE);
@@ -143,10 +144,11 @@ public class TVShowDetailsFragment extends Fragment {
                     intent.setData(Uri.parse(tvShowDetailsResponse.getTvShowDetails().getUrl()));
                     startActivity(intent);
                 });
+
                 binding.buttonWebsite.setVisibility(View.VISIBLE);
                 binding.buttonEpisodes.setVisibility(View.VISIBLE);
                 binding.buttonEpisodes.setOnClickListener(v -> {
-                    if(episodeBottomSheetDialog == null) {
+                    if (episodeBottomSheetDialog == null) {
                         episodeBottomSheetDialog = new BottomSheetDialog(requireContext());
                         layoutEpisodesBottomSheetBinding = DataBindingUtil.inflate(
                                 LayoutInflater.from(requireContext()),
@@ -159,39 +161,51 @@ public class TVShowDetailsFragment extends Fragment {
                                 new EpisodeAdapter(tvShowDetailsResponse.getTvShowDetails().getEpisodes())
                         );
 
-                        String showName = "";
-                        showName = tvShow.getName();
                         layoutEpisodesBottomSheetBinding.textTitle.setText(
-                                String.format("Episodes | %s", args.getString("name"))
+                                String.format("Episodes | %s", tvShow != null && tvShow.getName() != null ? tvShow.getName() : "N/A")
                         );
                         layoutEpisodesBottomSheetBinding.imageClose.setOnClickListener(v1 -> episodeBottomSheetDialog.dismiss());
-                        episodeBottomSheetDialog.show();
-                    } else {
-                        episodeBottomSheetDialog.show();
                     }
+                    episodeBottomSheetDialog.show();
                 });
             }
         });
-        binding.imageWatchList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new CompositeDisposable().add(tvShowDetailsViewModel.addToWatchlist(tvShow)
+
+        binding.imageWatchList.setOnClickListener(v -> {
+            CompositeDisposable compositeDisposable = new CompositeDisposable();
+            if (isTVShowAvailabeInWatchlist) {
+                compositeDisposable.add(tvShowDetailsViewModel.removeTVShowFromWtachlist(tvShow)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                            isTVShowAvailabeInWatchlist = false;
+                            TempDataHolder.IS_WATCHLIST_UPDATED = true;
+                            binding.imageWatchList.setImageResource(R.drawable.ic_favorites);
+                            Toast.makeText(getContext(), "Removed From Favorites!", Toast.LENGTH_SHORT).show();
+                            compositeDisposable.dispose();
+                        }, throwable -> {
+                            Log.e(TAG, "Failed to remove from watchlist", throwable);
+                            compositeDisposable.dispose();
+                        }));
+            } else {
+                compositeDisposable.add(tvShowDetailsViewModel.addToWatchlist(tvShow)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(() -> {
+                            TempDataHolder.IS_WATCHLIST_UPDATED = true;
                             binding.imageWatchList.setImageResource(R.drawable.ic_check);
                             Toast.makeText(getContext(), "Added to watchlist", Toast.LENGTH_SHORT).show();
+                            compositeDisposable.dispose();
                         }, throwable -> {
                             throwable.printStackTrace();
                             Toast.makeText(getContext(), "Failed to add to watchlist", Toast.LENGTH_SHORT).show();
-                        })
-                );
+                            compositeDisposable.dispose();
+                        }));
             }
         });
 
         binding.imageWatchList.setVisibility(View.VISIBLE);
         loadBasicTvShowDetails();
-
     }
 
     private void loadImageSlider(String[] sliderImages) {
@@ -199,7 +213,8 @@ public class TVShowDetailsFragment extends Fragment {
         binding.sliderViewPager.setAdapter(new ImageSliderAdapter(sliderImages));
         binding.sliderViewPager.setVisibility(View.VISIBLE);
         binding.viewEdge.setVisibility(View.VISIBLE);
-        setUpSliderIndicatrs(sliderImages.length);
+        setUpSliderIndicators(sliderImages.length);
+
         binding.sliderViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -209,13 +224,13 @@ public class TVShowDetailsFragment extends Fragment {
         });
     }
 
-    private void setUpSliderIndicatrs(int count) {
+    private void setUpSliderIndicators(int count) {
         ImageView[] indicators = new ImageView[count];
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        layoutParams.setMargins(0,0,0,0);
-        for (int i=0; i <indicators.length; i++) {
+        layoutParams.setMargins(0, 0, 0, 0);
+        for (int i = 0; i < indicators.length; i++) {
             indicators[i] = new ImageView(requireContext());
             indicators[i].setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.background_slider_indicator_inactive));
             indicators[i].setLayoutParams(layoutParams);
@@ -227,29 +242,22 @@ public class TVShowDetailsFragment extends Fragment {
 
     private void setUpCurrentIndicators(int position) {
         int childCount = binding.layoutSliderIndicators.getChildCount();
-        for(int i = 0; i < childCount; i++){
-
+        for (int i = 0; i < childCount; i++) {
             ImageView imageView = (ImageView) binding.layoutSliderIndicators.getChildAt(i);
             if (i == position) {
-                imageView.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.background_slider_indicator));
-            }
-            else {
+                imageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.background_slider_indicator));
+            } else {
                 imageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.background_slider_indicator_inactive));
             }
         }
     }
 
     private void loadBasicTvShowDetails() {
-        Bundle args = getArguments();
-        if (args != null) {
-            // Set the text views with data from the bundle
-            binding.setTvShowName(args.getString("name"));
-            binding.setNetworkCountry(args.getString("network") + " (" + args.getString("country") + ")");
-            binding.setStatus(args.getString("status"));
-            binding.setStartDate(args.getString("startDate"));
-
-            // Make text views visible
+        if (tvShow != null) {
+            binding.setTvShowName(tvShow.getName());
+            binding.setNetworkCountry(tvShow.getNetwork() + " (" + tvShow.getCountry() + ")");
+            binding.setStatus(tvShow.getStatus());
+            binding.setStartDate(tvShow.getStartDate());
             binding.textTvName.setVisibility(View.VISIBLE);
             binding.textNetworkCountry.setVisibility(View.VISIBLE);
             binding.textStatus.setVisibility(View.VISIBLE);

@@ -9,15 +9,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
 import com.example.filmworld.R;
 import com.example.filmworld.models.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private NavController navController;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +30,44 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
         mAuth = FirebaseAuth.getInstance();
+        setupNavigation();
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return navController.navigateUp() || super.onSupportNavigateUp();
+    }
+
+    private void setupNavigation() {
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragmentContainerView);
+        if (navHostFragment != null) {
+            navController = navHostFragment.getNavController();
+            NavigationUI.setupWithNavController(bottomNavigationView, navController);
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                int destinationId = destination.getId();
+
+                // Show bottom navigation only on mainPageFragment and watchlistFragment
+                if (destinationId == R.id.mainPageFragment || destinationId == R.id.watchlistFragment2) {
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                } else {
+                    bottomNavigationView.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            // Add error handling in case the fragment isn't found
+            Toast.makeText(this, "Navigation host fragment not found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public FirebaseAuth getFirebaseAuth() {
         return mAuth;
     }
@@ -45,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_mainPageFragment);
+                // FIXED: Use the navController directly since we know we have it
+                navController.navigate(R.id.action_loginFragment_to_mainPageFragment);
             } else {
                 Toast.makeText(this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -61,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 addDataToDatabase(email, phoneNumber);
                 Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainPageFragment);
-
+                // FIXED: Use the navController directly
+                navController.navigate(R.id.action_registerFragment_to_mainPageFragment);
             } else {
                 Toast.makeText(this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -108,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
         return password.matches(".*[^a-zA-Z0-9].*");
     }
+
     public void addDataToDatabase(String email, String phone) {
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
