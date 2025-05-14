@@ -45,9 +45,10 @@ public class MainPageFragment extends Fragment implements TVShowsListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main_page, container, false);
-        mainPageRecyclerView = view.findViewById(R.id.tvShowRecyclerView);
-        progressBar = view.findViewById(R.id.progressBar);  // Add ID to your ProgressBar in XML
+        binding = FragmentMainPageBinding.inflate(inflater, container, false);
+        view = binding.getRoot(); // שומרת על view לשימוש ב־Navigation
+        mainPageRecyclerView = binding.tvShowRecyclerView;
+        progressBar = binding.progressBar;
         doInitialization();
         return view;
     }
@@ -70,6 +71,9 @@ public class MainPageFragment extends Fragment implements TVShowsListener {
                 }
             }
         });
+        binding.searchIconButton.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_mainPageFragment_to_searchFragment)
+        );
         getMostPopularTVShows();
     }
 

@@ -40,14 +40,6 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-            <ImageView
-                android:id="@+id/searchIconButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="5dp"
-                android:padding="2dp"
-                android:src="@drawable/search_ic" />
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
